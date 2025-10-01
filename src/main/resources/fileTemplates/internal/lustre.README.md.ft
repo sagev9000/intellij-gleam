@@ -1,4 +1,5 @@
-#[[#]] ${gleamProjectName} with lustre!
+#set( $H = '#' )
+$H ${gleamProjectName} with lustre!
 
 Make sure you have gleam, erlang, and rebar3 [installed](https://gleam.run/getting-started/installing/) on your system,
 then execute:

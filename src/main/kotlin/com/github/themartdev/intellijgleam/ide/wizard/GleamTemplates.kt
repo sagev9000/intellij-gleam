@@ -10,14 +10,14 @@ enum class GleamTemplates(
         GleamProjectAssets(
             target = "",
             gleamCommands = listOf(),
-            templates = listOf(toml(), gitignore(), helloWorld(projectName))
+            templates = listOf(toml(), gitignore(), helloWorld(projectName)),
         )
     }),
     JAVASCRIPT(GleamBundle.message("gleam.wizard.template.javascript.name"), { projectName ->
         GleamProjectAssets(
             target = JS_TARGET,
             gleamCommands = listOf(),
-            templates = listOf(toml(), gitignore(), helloWorld(projectName))
+            templates = listOf(toml(), gitignore(), helloWorld(projectName)),
         )
     }),
     LUSTRE_BASIC(GleamBundle.message("gleam.wizard.template.lustre.simple.name"), { projectName ->
@@ -30,8 +30,8 @@ enum class GleamTemplates(
             templates = listOf(
                 toml(),
                 gitignore(),
-                Pair("README.md", "lustre.README.md"),
-                Pair("src/${projectName}.gleam", "lustre.simple.main.gleam")
+                lustreReadme(),
+                Pair("src/${projectName}.gleam", "lustre.simple.main.gleam"),
             )
         )
     });
@@ -43,8 +43,9 @@ enum class GleamTemplates(
         private const val JS_TARGET = "target = \"javascript\"\n"
 
         fun toml() = Pair("gleam.toml", "gleam.toml")
-
         fun gitignore() = Pair(".gitignore", "gleam.gitignore")
+
+        fun lustreReadme() = Pair("README.md", "lustre.README.md")
 
         fun helloWorld(projectName: String) =
             Pair("src/${projectName}.gleam", "main.gleam")
