@@ -1,12 +1,14 @@
 package com.github.themartdev.intellijgleam.ide.lsp
 
 import com.intellij.openapi.components.*
-import com.intellij.openapi.project.Project
+import kotlin.io.path.Path
+import kotlin.io.path.isExecutable
 
 @Service(Service.Level.APP)
 @State(name = "GleamToolchainSettings", storages = [Storage("gleamToolchainSettings.xml")])
 class GleamServiceSettings() :
     SimplePersistentStateComponent<GleamToolchainSettings>(GleamToolchainSettings()) {
+
     var lspMode
         get() = state.lspMode
         set(value) {
@@ -16,7 +18,7 @@ class GleamServiceSettings() :
     var gleamPath
         get() = state.gleamPath ?: ""
         set(value) {
-            state.gleamPath = value
+            state.gleamPath = value.ifBlank { getPath("gleam") }
         }
 
     var erlangPath
@@ -27,12 +29,20 @@ class GleamServiceSettings() :
 
     companion object {
         fun getInstance(): GleamServiceSettings = service()
+
+        fun getPath(executableName: String): String? {
+            val pathVar = System.getenv("PATH")
+            val allDirs = pathVar.split(":", ";").map { Path(it).resolve(executableName) }
+            val executablePath = allDirs.firstOrNull { it.isExecutable() }
+            return executablePath?.toString()
+        }
+
     }
 }
 
 class GleamToolchainSettings : BaseState() {
     var lspMode by enum(GleamLspMode.ENABLED)
-    var gleamPath by string("")
+    var gleamPath by string(GleamServiceSettings.getPath("gleam") ?: "")
     var erlangPath by string("")
 }
 

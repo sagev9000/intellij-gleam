@@ -28,8 +28,6 @@ import com.intellij.openapi.ui.getCanonicalPath
 import com.intellij.openapi.ui.getPresentablePath
 import com.intellij.openapi.ui.shortenTextWithEllipsis
 import com.intellij.openapi.ui.validation.*
-import com.intellij.openapi.ui.validation.CHECK_MODULE_PATH
-import com.intellij.openapi.ui.validation.CHECK_PROJECT_PATH
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.io.toCanonicalPath
 import com.intellij.openapi.util.io.toNioPathOrNull
@@ -44,8 +42,9 @@ import kotlin.io.path.name
 /**
  * A re-implementation of NewProjectWizardBaseStep, with stricter module naming, to fit Gleam.
  *
- * @see NewProjectWizardBaseStep
+ * @see com.intellij.ide.wizard.NewProjectWizardBaseStep
  */
+@Suppress("UnstableApiUsage")
 class NewGleamProjectStep(parent: NewProjectWizardStep) : AbstractNewProjectWizardStep(parent), NewProjectWizardBaseData {
     override val nameProperty: GraphProperty<String> = propertyGraph.lazyProperty(::suggestName)
     override val pathProperty: GraphProperty<String> = propertyGraph.lazyProperty { suggestLocation().toCanonicalPath() }
@@ -106,10 +105,10 @@ class NewGleamProjectStep(parent: NewProjectWizardStep) : AbstractNewProjectWiza
 
     val CHECK_GLEAM_NAME: DialogValidation.WithTwoParameters<Project?, () -> String> = validationErrorFor { project, name ->
         if (name.startsWith("gleam_")) {
-            return@validationErrorFor GleamBundle.message("gleam.wizard.newproject.reserved.error")
+            return@validationErrorFor GleamBundle.message("gleam.wizard.project.reserved.error")
         }
         if (!name.matches(Regex("[a-z][a-z0-9_]*"))) {
-            return@validationErrorFor GleamBundle.message("gleam.wizard.newproject.illegal.error")
+            return@validationErrorFor GleamBundle.message("gleam.wizard.project.illegal.error")
         }
         return@validationErrorFor null
     }
