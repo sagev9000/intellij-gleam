@@ -20,6 +20,7 @@ import java.util.*
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.Icon
+import javax.swing.JLabel
 import javax.swing.JPanel
 
 class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirectoryProjectGenerator.GleamGeneratorSettings>() {
@@ -33,20 +34,21 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
     override fun createPeer(): ProjectGeneratorPeer<GleamGeneratorSettings> {
         val settings = GleamGeneratorSettings(null)
 
-        val comboBox = ComboBox<String>()
-        GleamTemplates.entries.forEach { comboBox.addItem(it.label) }
-        comboBox.addItemListener {
-            settings.template = GleamTemplates.fromLabel(comboBox.selectedItem as String)
+        val component = JPanel().apply {
+            add(Box(BoxLayout.X_AXIS).apply {
+
+                add(JLabel(GleamBundle.message("gleam.wizard.template.label")))
+
+                add(ComboBox<String>().apply {
+                    GleamTemplates.entries.forEach { addItem(it.label) }
+                    addItemListener {
+                        settings.template = GleamTemplates.fromLabel(this.selectedItem as String)
+                    }
+                })
+            })
         }
 
-        val panel = JPanel()
-        val row = Box(BoxLayout.X_AXIS)
-        row.add(javax.swing.JLabel(GleamBundle.message("gleam.wizard.template.label")))
-        row.add(comboBox)
-        panel.add(row)
-
-        panel.add(comboBox)
-        return GeneratorPeerImpl(settings, panel)
+        return GeneratorPeerImpl(settings, component)
     }
 
     override fun generateProject(
