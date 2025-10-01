@@ -1,0 +1,8 @@
+#[[#]] ${gleamProjectName} with lustre!
+
+Make sure you have gleam, erlang, and rebar3 [installed](https://gleam.run/getting-started/installing/) on your system,
+then execute:
+
+```shell
+gleam run -m lustre/dev start
+```

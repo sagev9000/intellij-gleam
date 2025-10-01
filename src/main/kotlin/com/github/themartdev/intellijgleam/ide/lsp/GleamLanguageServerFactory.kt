@@ -15,7 +15,7 @@ class GleamLanguageServerFactory : LanguageServerFactory, LanguageServerEnableme
         if (!validateLSP4IJCompatibility()) {
             return false
         }
-        val settings = GleamServiceSettings.getInstance(project)
+        val settings = GleamServiceSettings.getInstance()
         return settings.lspMode == GleamLspMode.ENABLED
     }
 
@@ -29,7 +29,7 @@ class GleamLanguageServerFactory : LanguageServerFactory, LanguageServerEnableme
     }
 
     override fun setEnabled(enabled: Boolean, project: Project) {
-        val settings = GleamServiceSettings.getInstance(project)
+        val settings = GleamServiceSettings.getInstance()
         if (enabled) {
             settings.lspMode = GleamLspMode.ENABLED
         } else {

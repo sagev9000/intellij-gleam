@@ -21,7 +21,7 @@ import com.redhat.devtools.lsp4ij.LanguageServerManager
 class GleamSettingsConfigurable(private val project: Project) :
     BoundConfigurable(GleamBundle.message("gleam.settings.configurable.title")), Configurable {
 
-    private val settings = GleamServiceSettings.getInstance(project)
+    private val settings = GleamServiceSettings.getInstance()
     private var originalGleamPath = settings.gleamPath
 
     private val gleamPathComboBox = GleamPathComboBox(project)

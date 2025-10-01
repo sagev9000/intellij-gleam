@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project
 import com.redhat.devtools.lsp4ij.server.OSProcessStreamConnectionProvider
 
 class GleamLanguageServer(private val project: Project) : OSProcessStreamConnectionProvider() {
-    private fun getGleamSettings(): GleamServiceSettings = GleamServiceSettings.getInstance(project)
+    private fun getGleamSettings(): GleamServiceSettings = GleamServiceSettings.getInstance()
 
     override fun start() {
         super.commandLine = buildCommandLine()

@@ -42,7 +42,7 @@ class GleamStartupActivity : ProjectActivity {
     }
 
     private fun checkLSPEnabled(project: Project) {
-        val lspEnabled = GleamServiceSettings.getInstance(project).lspMode == GleamLspMode.ENABLED
+        val lspEnabled = GleamServiceSettings.getInstance().lspMode == GleamLspMode.ENABLED
         if (!lspEnabled) {
             Notifications.Bus.notify(
                 Notification(

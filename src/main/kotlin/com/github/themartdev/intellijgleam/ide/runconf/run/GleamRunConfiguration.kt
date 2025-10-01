@@ -24,12 +24,12 @@ class GleamRunConfiguration(project: Project, configurationFactory: Configuratio
         return if (options.useCustomGleam) {
             options.customGleamPath ?: ""
         } else {
-            GleamServiceSettings.getInstance(project).gleamPath
+            GleamServiceSettings.getInstance().gleamPath
         }
     }
 
     fun getActualErlangPath(): String {
-        return GleamServiceSettings.getInstance(project).erlangPath
+        return GleamServiceSettings.getInstance().erlangPath
     }
 
     fun getModuleQualifier(): String? {

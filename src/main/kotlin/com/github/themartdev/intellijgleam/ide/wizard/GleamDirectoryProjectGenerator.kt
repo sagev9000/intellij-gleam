@@ -37,7 +37,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<Object>() {
                     GleamProjectAssets.assetProps(project.name, "")
                         .forEach { (key, value) -> properties[key] = value }
 
-                    GleamProjectAssets.fileAssets().forEach { (sourcePath, templateName) ->
+                    GleamProjectAssets.fileAssets(project.name).forEach { (sourcePath, templateName) ->
                         val pathParts = sourcePath.split("/").toMutableList()
                         val targetFile = pathParts.removeLast()
                         var dir = psiBaseDir

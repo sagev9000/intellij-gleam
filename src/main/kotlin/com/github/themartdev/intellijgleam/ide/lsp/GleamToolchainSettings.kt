@@ -3,9 +3,9 @@ package com.github.themartdev.intellijgleam.ide.lsp
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
 
-@Service(Service.Level.PROJECT)
-@State(name = "GleamToolchainSettings", storages = [Storage(StoragePathMacros.WORKSPACE_FILE)])
-class GleamServiceSettings(val project: Project) :
+@Service(Service.Level.APP)
+@State(name = "GleamToolchainSettings", storages = [Storage("gleamToolchainSettings.xml")])
+class GleamServiceSettings() :
     SimplePersistentStateComponent<GleamToolchainSettings>(GleamToolchainSettings()) {
     var lspMode
         get() = state.lspMode
@@ -26,7 +26,7 @@ class GleamServiceSettings(val project: Project) :
         }
 
     companion object {
-        fun getInstance(project: Project): GleamServiceSettings = project.service()
+        fun getInstance(): GleamServiceSettings = service()
     }
 }
 

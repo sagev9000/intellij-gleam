@@ -25,7 +25,7 @@ class GleamEditorNotificationProvider : EditorNotificationProvider, DumbAware {
         if (file.fileType != GleamFileType) return null
 
 
-        val settings = GleamServiceSettings.getInstance(project)
+        val settings = GleamServiceSettings.getInstance()
         if (settings.gleamPath.isNotEmpty() && settings.erlangPath.isNotEmpty()) return null
 
         return Function {
