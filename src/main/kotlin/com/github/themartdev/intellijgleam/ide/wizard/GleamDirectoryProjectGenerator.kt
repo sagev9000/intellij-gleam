@@ -35,8 +35,8 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
         val settings = GleamGeneratorSettings(null)
 
         val component = JPanel().apply {
+            layout = BoxLayout(this, BoxLayout.Y_AXIS)
             add(Box(BoxLayout.X_AXIS).apply {
-
                 add(JLabel(GleamBundle.message("gleam.wizard.template.label")))
 
                 add(ComboBox<String>().apply {
