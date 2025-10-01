@@ -62,13 +62,13 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
                 val psiBaseDir = PsiManager.getInstance(project).findDirectory(baseDir) ?: return@runWriteAction
                 val templateManager = FileTemplateManager.getInstance(project)
 
+                val projectTemplate = settings.template!!
+                val templateAssets = projectTemplate.gleamProjectAssets(project.name)
+
                 val properties = Properties()
-                GleamProjectAssets.assetProps(project.name, "")
+                GleamProjectAssets.assetProps(project.name, templateAssets.target)
                     .forEach { (key, value) -> properties[key] = value }
 
-                val projectTemplate = settings.template!!
-
-                val templateAssets = projectTemplate.gleamProjectAssets(project.name)
                 templateAssets.templates.forEach { (sourcePath, templateName) ->
                     val pathParts = sourcePath.split("/").toMutableList()
                     val targetFile = pathParts.removeLast()
