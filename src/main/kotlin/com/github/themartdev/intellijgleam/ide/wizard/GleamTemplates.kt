@@ -36,6 +36,10 @@ enum class GleamTemplates(
         )
     });
 
+    fun requiresGleamExe(): Boolean {
+        return this.gleamProjectAssets("").gleamCommands.isNotEmpty()
+    }
+
     companion object {
         fun fromLabel(label: String): GleamTemplates {
             return entries.first { it.label == label }

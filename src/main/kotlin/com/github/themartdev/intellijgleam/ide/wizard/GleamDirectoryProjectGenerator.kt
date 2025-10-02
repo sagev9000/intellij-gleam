@@ -3,6 +3,7 @@ package com.github.themartdev.intellijgleam.ide.wizard
 import com.github.themartdev.intellijgleam.GleamBundle
 import com.github.themartdev.intellijgleam.GleamIcons
 import com.github.themartdev.intellijgleam.ide.common.GleamProjectUtils
+import com.github.themartdev.intellijgleam.ide.lsp.GleamServiceSettings
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.fileTemplates.FileTemplateUtil
 import com.intellij.openapi.application.ApplicationManager
@@ -33,7 +34,9 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
 
     override fun createPeer(): ProjectGeneratorPeer<GleamGeneratorSettings> {
         val settings = GleamGeneratorSettings(null)
+        val gleamPathIsKnown = GleamServiceSettings.getInstance().gleamPath.isNotBlank()
 
+        // TODO: Add a warning indicator if gleam path is unknown?
         val component = JPanel().apply {
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             add(Box(BoxLayout.X_AXIS).apply {
