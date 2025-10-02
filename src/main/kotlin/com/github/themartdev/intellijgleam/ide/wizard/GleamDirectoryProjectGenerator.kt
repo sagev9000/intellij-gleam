@@ -65,9 +65,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
                 val projectTemplate = settings.template!!
                 val templateAssets = projectTemplate.gleamProjectAssets(project.name)
 
-                val properties = Properties()
-                GleamProjectAssets.assetProps(project.name, templateAssets.target)
-                    .forEach { (key, value) -> properties[key] = value }
+                val properties = GleamProjectAssets.assetProps(project.name, templateAssets.target)
 
                 templateAssets.templates.forEach { (sourcePath, templateName) ->
                     val pathParts = sourcePath.split("/").toMutableList()
@@ -75,7 +73,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
                     var dir = psiBaseDir
                     pathParts.forEach { dir = dir.createSubdirectory(it) }
                     val template = templateManager.getInternalTemplate(templateName)
-                    FileTemplateUtil.createFromTemplate(template, targetFile, properties, dir)
+                    FileTemplateUtil.createFromTemplate(template, targetFile, properties, dir, null)
                 }
 
                 val workingDirectory = psiBaseDir.virtualFile.path

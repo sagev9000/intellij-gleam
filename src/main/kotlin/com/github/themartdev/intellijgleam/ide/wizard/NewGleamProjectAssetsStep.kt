@@ -18,7 +18,7 @@ class NewGleamProjectAssetsStep(private val parent: NewGleamProjectTargetStep) :
 
         val props = GleamProjectAssets.assetProps(project.name, templateAssets.target)
         GleamProjectAssets.assetDirs().forEach { dir -> addEmptyDirectoryAsset(dir) }
-        templateAssets.templates.forEach { (sourcePath, templateName) -> addTemplateAsset(sourcePath, templateName, *props) }
+        templateAssets.templates.forEach { (sourcePath, templateName) -> addTemplateAsset(sourcePath, templateName, props) }
 
         ApplicationManager.getApplication().invokeLater {
             runWriteAction {

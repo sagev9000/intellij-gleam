@@ -31,7 +31,7 @@ enum class GleamTemplates(
                 toml(),
                 gitignore(),
                 lustreReadme(),
-                Pair("src/${projectName}.gleam", "lustre.simple.main.gleam"),
+                Template("src/${projectName}.gleam", "lustre.simple.main.gleam"),
             )
         )
     });
@@ -42,13 +42,13 @@ enum class GleamTemplates(
         }
         private const val JS_TARGET = "target = \"javascript\"\n"
 
-        fun toml() = Pair("gleam.toml", "gleam.toml")
-        fun gitignore() = Pair(".gitignore", "gleam.gitignore")
+        fun toml() = Template("gleam.toml", "gleam.toml")
+        fun gitignore() = Template(".gitignore", "gleam.gitignore")
 
-        fun lustreReadme() = Pair("README.md", "lustre.README.md")
+        fun lustreReadme() = Template("README.md", "lustre.README.md")
 
         fun helloWorld(projectName: String) =
-            Pair("src/${projectName}.gleam", "main.gleam")
+            Template("src/${projectName}.gleam", "main.gleam")
 
     }
 }
