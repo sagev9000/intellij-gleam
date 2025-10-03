@@ -1,4 +1,4 @@
-package com.github.themartdev.intellijgleam.ide.wizard
+package com.github.themartdev.intellijgleam.ide.wizard.java
 
 import com.github.themartdev.intellijgleam.GleamIcons
 import com.intellij.ide.util.projectWizard.WizardContext

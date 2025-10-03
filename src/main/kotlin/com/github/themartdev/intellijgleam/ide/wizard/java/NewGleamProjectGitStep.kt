@@ -1,4 +1,4 @@
-package com.github.themartdev.intellijgleam.ide.wizard
+package com.github.themartdev.intellijgleam.ide.wizard.java
 
 import com.intellij.ide.IdeBundle
 import com.intellij.ide.projectWizard.NewProjectWizardCollector.Base.logGitChanged
@@ -6,10 +6,8 @@ import com.intellij.ide.projectWizard.NewProjectWizardCollector.Base.logGitFinis
 import com.intellij.ide.wizard.AbstractNewProjectWizardStep
 import com.intellij.ide.wizard.GitNewProjectWizardData
 import com.intellij.ide.wizard.NewProjectWizardBaseData
-import com.intellij.ide.wizard.NewProjectWizardBaseStep
 import com.intellij.ide.wizard.NewProjectWizardStep.Companion.GIT_PROPERTY_NAME
 import com.intellij.ide.wizard.setupProjectSafe
-import com.intellij.ide.wizard.whenProjectCreated
 import com.intellij.openapi.GitRepositoryInitializer
 import com.intellij.openapi.observable.util.bindBooleanStorage
 import com.intellij.openapi.progress.runBackgroundableTask

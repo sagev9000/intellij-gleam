@@ -104,8 +104,8 @@
 
         <postStartupActivity implementation="com.github.themartdev.intellijgleam.ide.lifecycle.GleamStartupActivity"/>
 
-        <newProjectWizard.generator implementation="com.github.themartdev.intellijgleam.ide.wizard.GleamNewProjectWizard" />
-        <directoryProjectGenerator implementation="com.github.themartdev.intellijgleam.ide.wizard.GleamDirectoryProjectGenerator" />
+        <newProjectWizard.generator implementation="com.github.themartdev.intellijgleam.ide.wizard.java.GleamNewProjectWizard" />
+        <directoryProjectGenerator implementation="com.github.themartdev.intellijgleam.ide.wizard.nonjava.GleamDirectoryProjectGenerator" />
 
         <lang.psiStructureViewFactory
                 language="Gleam"

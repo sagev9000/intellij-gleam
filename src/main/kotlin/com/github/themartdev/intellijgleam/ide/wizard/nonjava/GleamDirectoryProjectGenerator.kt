@@ -1,9 +1,11 @@
-package com.github.themartdev.intellijgleam.ide.wizard
+package com.github.themartdev.intellijgleam.ide.wizard.nonjava
 
 import com.github.themartdev.intellijgleam.GleamBundle
 import com.github.themartdev.intellijgleam.GleamIcons
 import com.github.themartdev.intellijgleam.ide.common.GleamProjectUtils
 import com.github.themartdev.intellijgleam.ide.lsp.GleamServiceSettings
+import com.github.themartdev.intellijgleam.ide.wizard.GleamProjectAssets
+import com.github.themartdev.intellijgleam.ide.wizard.GleamTemplates
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.fileTemplates.FileTemplateUtil
 import com.intellij.openapi.application.ApplicationManager
@@ -46,7 +48,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
     override fun createPeer(): ProjectGeneratorPeer<GleamGeneratorSettings> {
         val settings = GleamGeneratorSettings(
             template = GleamTemplates.ERLANG,
-            gleamPathIsKnown = GleamServiceSettings.getInstance().gleamPath.isNotBlank(),
+            gleamPathIsKnown = GleamServiceSettings.Companion.getInstance().gleamPath.isNotBlank(),
         )
 
         val warningLabel = JLabel()
@@ -63,7 +65,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
                     ComboBox<String>().apply {
                         GleamTemplates.entries.forEach { addItem(it.label) }
                         addItemListener {
-                            settings.template = GleamTemplates.fromLabel(this.selectedItem as String)
+                            settings.template = GleamTemplates.Companion.fromLabel(this.selectedItem as String)
                             updateWarningLabel()
                         }
                     }
@@ -107,7 +109,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
         val projectTemplate = settings.template
         val templateAssets = projectTemplate.gleamProjectAssets(project.name)
 
-        val properties = GleamProjectAssets.assetProps(project.name, templateAssets.target)
+        val properties = GleamProjectAssets.Companion.assetProps(project.name, templateAssets.target)
 
         templateAssets.templates.forEach { (sourcePath, templateName) ->
             val pathParts = sourcePath.split("/").toMutableList()

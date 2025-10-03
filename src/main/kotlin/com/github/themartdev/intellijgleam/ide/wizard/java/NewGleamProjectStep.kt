@@ -1,4 +1,4 @@
-package com.github.themartdev.intellijgleam.ide.wizard
+package com.github.themartdev.intellijgleam.ide.wizard.java
 
 import com.github.themartdev.intellijgleam.GleamBundle
 import com.intellij.ide.IdeBundle.message
@@ -28,6 +28,7 @@ import com.intellij.openapi.ui.getCanonicalPath
 import com.intellij.openapi.ui.getPresentablePath
 import com.intellij.openapi.ui.shortenTextWithEllipsis
 import com.intellij.openapi.ui.validation.*
+import com.intellij.openapi.ui.validation.invoke
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.io.toCanonicalPath
 import com.intellij.openapi.util.io.toNioPathOrNull

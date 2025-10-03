@@ -1,6 +1,7 @@
-package com.github.themartdev.intellijgleam.ide.wizard
+package com.github.themartdev.intellijgleam.ide.wizard.java
 
 import com.github.themartdev.intellijgleam.GleamBundle
+import com.github.themartdev.intellijgleam.ide.wizard.GleamTemplates
 import com.intellij.ide.wizard.AbstractNewProjectWizardStep
 import com.intellij.ide.wizard.NewProjectWizardStep
 import com.intellij.openapi.observable.properties.GraphProperty
@@ -10,7 +11,7 @@ class NewGleamProjectTargetStep(parent: NewProjectWizardStep) : AbstractNewProje
     val templateProperty: GraphProperty<String> = propertyGraph.property(GleamTemplates.ERLANG.label)
     private var template: String by templateProperty
 
-    fun template() = GleamTemplates.fromLabel(template)
+    fun template() = GleamTemplates.Companion.fromLabel(template)
 
     override fun setupUI(builder: Panel) {
         with(builder) {
