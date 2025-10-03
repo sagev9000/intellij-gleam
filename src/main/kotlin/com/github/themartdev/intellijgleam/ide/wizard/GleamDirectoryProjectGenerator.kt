@@ -19,7 +19,6 @@ import com.intellij.platform.ProjectGeneratorPeer
 import com.intellij.psi.PsiManager
 import java.awt.Color
 import java.awt.Component
-import java.awt.Container
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.Icon
@@ -38,8 +37,11 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
         children.forEach { child -> this.add(child) }
     }
 
-    fun row(vararg children: Component) = boxWith(BoxLayout.X_AXIS, *children)
-    fun col(vararg children: Component) = boxWith(BoxLayout.Y_AXIS, *children)
+    fun row(vararg children: Component) =
+        boxWith(BoxLayout.X_AXIS, *children)
+
+    fun col(vararg children: Component) =
+        boxWith(BoxLayout.Y_AXIS, *children)
 
     override fun createPeer(): ProjectGeneratorPeer<GleamGeneratorSettings> {
         val settings = GleamGeneratorSettings(
@@ -88,28 +90,37 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
     ) {
         ApplicationManager.getApplication().invokeLater {
             runWriteAction {
-                val psiBaseDir = PsiManager.getInstance(project).findDirectory(baseDir) ?: return@runWriteAction
-                val templateManager = FileTemplateManager.getInstance(project)
-
-                val projectTemplate = settings.template
-                val templateAssets = projectTemplate.gleamProjectAssets(project.name)
-
-                val properties = GleamProjectAssets.assetProps(project.name, templateAssets.target)
-
-                templateAssets.templates.forEach { (sourcePath, templateName) ->
-                    val pathParts = sourcePath.split("/").toMutableList()
-                    val targetFile = pathParts.removeLast()
-                    var dir = psiBaseDir
-                    pathParts.forEach { dir = dir.createSubdirectory(it) }
-                    val template = templateManager.getInternalTemplate(templateName)
-                    FileTemplateUtil.createFromTemplate(template, targetFile, properties, dir, null)
-                }
-
-                val workingDirectory = psiBaseDir.virtualFile.path
-                templateAssets.gleamCommands.forEach { args ->
-                    GleamProjectUtils.gleamCommand(workingDirectory, *args)
-                }
+                generateProjectNow(project, baseDir, settings, module)
             }
+        }
+    }
+
+    fun generateProjectNow(
+        project: Project,
+        baseDir: VirtualFile,
+        settings: GleamGeneratorSettings,
+        module: Module
+    ) {
+        val psiBaseDir = PsiManager.getInstance(project).findDirectory(baseDir) ?: return
+        val templateManager = FileTemplateManager.getInstance(project)
+
+        val projectTemplate = settings.template
+        val templateAssets = projectTemplate.gleamProjectAssets(project.name)
+
+        val properties = GleamProjectAssets.assetProps(project.name, templateAssets.target)
+
+        templateAssets.templates.forEach { (sourcePath, templateName) ->
+            val pathParts = sourcePath.split("/").toMutableList()
+            val targetFile = pathParts.removeLast()
+            var dir = psiBaseDir
+            pathParts.forEach { dir = dir.createSubdirectory(it) }
+            val template = templateManager.getInternalTemplate(templateName)
+            FileTemplateUtil.createFromTemplate(template, targetFile, properties, dir, null)
+        }
+
+        val workingDirectory = psiBaseDir.virtualFile.path
+        templateAssets.gleamCommands.forEach { args ->
+            GleamProjectUtils.gleamCommand(workingDirectory, *args)
         }
     }
 }
