@@ -26,30 +26,54 @@ import javax.swing.JPanel
 
 class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirectoryProjectGenerator.GleamGeneratorSettings>() {
 
-    class GleamGeneratorSettings(var template: GleamTemplates?)
+    class GleamGeneratorSettings(val gleamPathIsKnown: Boolean, var template: GleamTemplates)
 
     override fun getName(): @NlsContexts.Label String = GleamBundle.message("gleam.wizard.directory.project.generator.name")
 
     override fun getLogo(): Icon = GleamIcons.GLEAM
 
-    override fun createPeer(): ProjectGeneratorPeer<GleamGeneratorSettings> {
-        val settings = GleamGeneratorSettings(null)
-        val gleamPathIsKnown = GleamServiceSettings.getInstance().gleamPath.isNotBlank()
+    fun boxWith(layout: Int, vararg children: Component) = Box(layout).apply {
+        children.forEach { child -> this.add(child) }
+    }
 
-        // TODO: Add a warning indicator if gleam path is unknown?
+    fun row(vararg children: Component) = boxWith(BoxLayout.X_AXIS, *children)
+    fun col(vararg children: Component) = boxWith(BoxLayout.Y_AXIS, *children)
+
+    override fun createPeer(): ProjectGeneratorPeer<GleamGeneratorSettings> {
+        val settings = GleamGeneratorSettings(
+            template = GleamTemplates.ERLANG,
+            gleamPathIsKnown = GleamServiceSettings.getInstance().gleamPath.isNotBlank(),
+        )
+
+        val warningLabel = JLabel()
+        fun updateWarningLabel() {
+            warningLabel.isVisible = !settings.gleamPathIsKnown && settings.template.requiresGleamExe()
+        }
+
         val component = JPanel().apply {
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            add(Box(BoxLayout.X_AXIS).apply {
-                add(JLabel(GleamBundle.message("gleam.wizard.template.label")))
+            add(row(
+                JLabel(GleamBundle.message("gleam.wizard.template.label")),
 
-                add(ComboBox<String>().apply {
-                    GleamTemplates.entries.forEach { addItem(it.label) }
-                    addItemListener {
-                        settings.template = GleamTemplates.fromLabel(this.selectedItem as String)
+                col(
+                    ComboBox<String>().apply {
+                        GleamTemplates.entries.forEach { addItem(it.label) }
+                        addItemListener {
+                            settings.template = GleamTemplates.fromLabel(this.selectedItem as String)
+                            updateWarningLabel()
+                        }
                     }
+                )
+            ))
+            add(row(
+                add(warningLabel.apply {
+                    text = GleamBundle.message("gleam.wizard.template.no.gleam.error")
+                    foreground = Color.ORANGE
+                    isVisible = true
                 })
-            })
+            ))
         }
+        updateWarningLabel()
 
         return GeneratorPeerImpl(settings, component)
     }
@@ -65,7 +89,7 @@ class GleamDirectoryProjectGenerator : DirectoryProjectGeneratorBase<GleamDirect
                 val psiBaseDir = PsiManager.getInstance(project).findDirectory(baseDir) ?: return@runWriteAction
                 val templateManager = FileTemplateManager.getInstance(project)
 
-                val projectTemplate = settings.template!!
+                val projectTemplate = settings.template
                 val templateAssets = projectTemplate.gleamProjectAssets(project.name)
 
                 val properties = GleamProjectAssets.assetProps(project.name, templateAssets.target)
