@@ -11,21 +11,21 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.options.Configurable
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.bind
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.toMutableProperty
 import com.redhat.devtools.lsp4ij.LanguageServerManager
 
-class GleamSettingsConfigurable(private val project: Project) :
+class GleamSettingsConfigurable() :
     BoundConfigurable(GleamBundle.message("gleam.settings.configurable.title")), Configurable {
 
     private val settings = GleamServiceSettings.getInstance()
     private var originalGleamPath = settings.gleamPath
 
-    private val gleamPathComboBox = GleamPathComboBox(project)
-    private val erlangPathComboBox = ErlangPathComboBox(project)
+    private val gleamPathComboBox = GleamPathComboBox()
+    private val erlangPathComboBox = ErlangPathComboBox()
 
     override fun createPanel() = panel {
         loadDetectedGleamPaths()
@@ -104,7 +104,9 @@ class GleamSettingsConfigurable(private val project: Project) :
     private fun restartLanguageServer() {
         val stopOptions = LanguageServerManager.StopOptions()
         stopOptions.isWillDisable = false
-        LanguageServerManager.getInstance(project).stop("gleam-ls", stopOptions)
-        LanguageServerManager.getInstance(project).start("gleam-ls")
+        ProjectManager.getInstance().openProjects.forEach { project ->
+            LanguageServerManager.getInstance(project).stop("gleam-ls", stopOptions)
+            LanguageServerManager.getInstance(project).start("gleam-ls")
+        }
     }
 }

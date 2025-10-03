@@ -16,7 +16,7 @@ import javax.swing.JComponent
 
 class GleamRunConfigurationEditor(project: Project) : SettingsEditor<GleamRunConfiguration>() {
     private val modulePathField = GleamModulePathSelect(project)
-    private val customGleamField = GleamPathComboBox(project)
+    private val customGleamField = GleamPathComboBox()
     lateinit var useCustomGleam: Cell<JBCheckBox>
 
     override fun resetEditorFrom(s: GleamRunConfiguration) {
@@ -55,7 +55,7 @@ class GleamRunConfigurationEditor(project: Project) : SettingsEditor<GleamRunCon
         val modalityState = ModalityState.current()
         ApplicationManager.getApplication().executeOnPooledThread {
             val detectedGleamPaths = GleamExecutableFinder.findGleamInstalls()
-            val pathItems = detectedGleamPaths.map { it -> it.path }
+            val pathItems = detectedGleamPaths.map { it.path }
             ApplicationManager.getApplication().invokeLater({
                 customGleamField.addItems(pathItems)
             }, modalityState)

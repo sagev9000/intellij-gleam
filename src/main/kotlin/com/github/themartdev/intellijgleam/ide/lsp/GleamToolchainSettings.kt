@@ -1,8 +1,7 @@
 package com.github.themartdev.intellijgleam.ide.lsp
 
+import com.github.themartdev.intellijgleam.ide.common.GleamExecutableFinder
 import com.intellij.openapi.components.*
-import kotlin.io.path.Path
-import kotlin.io.path.isExecutable
 
 @Service(Service.Level.APP)
 @State(name = "GleamToolchainSettings", storages = [Storage("gleamToolchainSettings.xml")])
@@ -18,7 +17,7 @@ class GleamServiceSettings() :
     var gleamPath
         get() = state.gleamPath ?: ""
         set(value) {
-            state.gleamPath = value.ifBlank { getPath("gleam") }
+            state.gleamPath = value.ifBlank { getPath() }
         }
 
     var erlangPath
@@ -30,11 +29,9 @@ class GleamServiceSettings() :
     companion object {
         fun getInstance(): GleamServiceSettings = service()
 
-        fun getPath(executableName: String): String? {
-            val pathVar = System.getenv("PATH")
-            val allDirs = pathVar.split(":", ";").map { Path(it).resolve(executableName) }
-            val executablePath = allDirs.firstOrNull { it.isExecutable() }
-            return executablePath?.toString()
+        fun getPath(): String? {
+            val detectedGleamPaths = GleamExecutableFinder.findGleamInstalls()
+            return detectedGleamPaths.map { it.path }.firstOrNull()
         }
 
     }
@@ -42,7 +39,7 @@ class GleamServiceSettings() :
 
 class GleamToolchainSettings : BaseState() {
     var lspMode by enum(GleamLspMode.ENABLED)
-    var gleamPath by string(GleamServiceSettings.getPath("gleam") ?: "")
+    var gleamPath by string(GleamServiceSettings.getPath() ?: "")
     var erlangPath by string("")
 }
 

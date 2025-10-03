@@ -2,7 +2,6 @@ package com.github.themartdev.intellijgleam.ide.ui.components
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ColoredListCellRenderer
 import com.intellij.ui.MutableCollectionComboBoxModel
@@ -13,7 +12,7 @@ import javax.swing.JList
 import javax.swing.JTextField
 import javax.swing.plaf.basic.BasicComboBoxEditor
 
-abstract class AbstractExecutablePathComboBox(protected val project: Project?) :
+abstract class AbstractExecutablePathComboBox() :
     ComboBox<String>(MutableCollectionComboBoxModel()) {
 
     private val versionHints = ConcurrentHashMap<String, String?>()
