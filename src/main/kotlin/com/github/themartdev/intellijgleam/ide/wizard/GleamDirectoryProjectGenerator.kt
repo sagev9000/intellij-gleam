@@ -17,7 +17,9 @@ import com.intellij.platform.DirectoryProjectGeneratorBase
 import com.intellij.platform.GeneratorPeerImpl
 import com.intellij.platform.ProjectGeneratorPeer
 import com.intellij.psi.PsiManager
-import java.util.*
+import java.awt.Color
+import java.awt.Component
+import java.awt.Container
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.Icon
