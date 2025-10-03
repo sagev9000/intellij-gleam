@@ -1,4 +1,4 @@
-package com.github.themartdev.intellijgleam.ide.wizard.java
+package com.github.themartdev.intellijgleam.ide.wizard.java.borrowed
 
 import com.intellij.ide.IdeBundle
 import com.intellij.ide.projectWizard.NewProjectWizardCollector.Base.logGitChanged

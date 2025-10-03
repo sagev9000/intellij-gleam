@@ -1,6 +1,8 @@
 package com.github.themartdev.intellijgleam.ide.wizard.java
 
 import com.github.themartdev.intellijgleam.GleamIcons
+import com.github.themartdev.intellijgleam.ide.wizard.java.borrowed.NewGleamProjectGitStep
+import com.github.themartdev.intellijgleam.ide.wizard.java.borrowed.NewGleamProjectStep
 import com.intellij.ide.util.projectWizard.WizardContext
 import com.intellij.ide.wizard.GeneratorNewProjectWizard
 import com.intellij.ide.wizard.NewProjectWizardChainStep.Companion.nextStep

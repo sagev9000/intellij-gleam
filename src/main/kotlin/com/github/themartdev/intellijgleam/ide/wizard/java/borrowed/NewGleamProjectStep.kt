@@ -1,4 +1,4 @@
-package com.github.themartdev.intellijgleam.ide.wizard.java
+package com.github.themartdev.intellijgleam.ide.wizard.java.borrowed
 
 import com.github.themartdev.intellijgleam.GleamBundle
 import com.intellij.ide.IdeBundle.message
