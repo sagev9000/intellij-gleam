@@ -106,6 +106,8 @@
         <newProjectWizard.generator implementation="com.github.themartdev.intellijgleam.ide.wizard.java.GleamNewProjectWizard" />
         <directoryProjectGenerator implementation="com.github.themartdev.intellijgleam.ide.wizard.nonjava.GleamDirectoryProjectGenerator" />
 
+        <toolWindow factoryClass="com.github.themartdev.intellijgleam.ide.packages.GleamPackagesToolWindowFactory" id="Gleam Packages" />
+
         <lang.psiStructureViewFactory
                 language="Gleam"
                 implementationClass="com.redhat.devtools.lsp4ij.features.documentSymbol.LSPDocumentSymbolStructureViewFactory"/>
