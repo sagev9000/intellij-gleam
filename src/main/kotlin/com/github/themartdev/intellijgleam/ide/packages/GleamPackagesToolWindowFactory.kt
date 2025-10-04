@@ -1,12 +1,17 @@
 package com.github.themartdev.intellijgleam.ide.packages
 
+import com.github.themartdev.intellijgleam.GleamBundle
+import com.github.themartdev.intellijgleam.ide.common.GleamProjectUtils
+import com.github.themartdev.intellijgleam.ide.wizard.GleamCommandRunner
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBList
+import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.content.ContentFactory
-import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.util.net.IdeHttpClientHelpers
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,15 +26,17 @@ import java.awt.Color
 import java.awt.Component
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.DefaultListModel
 import javax.swing.JLabel
 import javax.swing.JList
 import javax.swing.JPanel
+import javax.swing.JSeparator
 import javax.swing.ListCellRenderer
 import javax.swing.Timer
 
@@ -39,7 +46,11 @@ class GleamPackagesToolWindowFactory : ToolWindowFactory {
         toolWindow: ToolWindow
     ) {
         val windowContent = GleamPackagesToolWindowContent(toolWindow)
-        val content = ContentFactory.getInstance().createContent(windowContent.contentPanel, "Tab Title", false)
+        val content = ContentFactory.getInstance().createContent(
+            windowContent.contentPanel,
+            GleamBundle.message("gleam.tool.package.window.title"),
+            false
+        )
         toolWindow.contentManager.addContent(content)
     }
 
@@ -51,34 +62,52 @@ class GleamPackagesToolWindowFactory : ToolWindowFactory {
             isSelected: Boolean,
             hasFocus: Boolean
         ): Component? {
-            return JLabel(value?.name)
+            // Rider::Nuget uses rows of
+            // [Icon] Name (• InstalledVersion)? <long separator> LatestVersion
+            return Box(BoxLayout.X_AXIS).apply {
+                // TODO? Icon
+                add(JLabel(value?.name))
+                // TODO: Installed version
+                // add(JLabel("•"))
+                add(JSeparator().apply {
+                    this.foreground = Color(0, 0, 0, 0)
+                })
+                add(JLabel(value?.latestStableVersion))
+            }
         }
     }
 
     private class GleamPackagesToolWindowContent(
         val toolWindow: ToolWindow,
         val contentPanel: JPanel = JPanel(),
-        val searchBox: JBTextField = JBTextField().apply{ this.text = "TEXT FIELD" },
+        val searchBox: JBTextField = JBTextField(),
     ) {
         init {
             val listModel = DefaultListModel<GleamPackage>()
             val packageList: JBList<GleamPackage> = JBList<GleamPackage>(listModel)
             contentPanel.apply {
-                border = BorderFactory.createLineBorder(Color.RED)
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
                 add(JPanel().apply {
                     layout = BorderLayout()
-                    border = BorderFactory.createLineBorder(Color.BLUE)
-                    alignmentX = Box.LEFT_ALIGNMENT
                     add(Box(BoxLayout.X_AXIS).apply {
-                        border = BorderFactory.createLineBorder(Color.GREEN)
-                        add(JLabel("Package Search:"))
+                        add(JLabel(GleamBundle.message("gleam.tool.package.search.bar.label")))
                         add(searchBox)
                     }, BorderLayout.NORTH)
-                    add(packageList, BorderLayout.CENTER)
+                    add(JBScrollPane(packageList), BorderLayout.CENTER)
+                })
+                // add(JPanel())
+            }
+            packageList.apply {
+                cellRenderer = GleamPackageRenderer()
+                addMouseListener(object : MouseAdapter() {
+                    override fun mouseClicked(e: MouseEvent?) {
+                        if (e?.clickCount != 2) {
+                            return
+                        }
+                        GleamCommandRunner.runCommand("add", packageList.selectedValue.name)
+                    }
                 })
             }
-            packageList.cellRenderer = GleamPackageRenderer()
 
             fun updateResultList() {
                 val results = search(searchBox.text)
